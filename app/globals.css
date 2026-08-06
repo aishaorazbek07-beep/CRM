@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink-50: #f6f7f9;
+  --color-ink-100: #eceef2;
+  --color-ink-200: #d5d9e2;
+  --color-ink-300: #b0b8c9;
+  --color-ink-400: #8590a8;
+  --color-ink-500: #66728c;
+  --color-ink-600: #515b72;
+  --color-ink-700: #424a5c;
+  --color-ink-800: #393f4e;
+  --color-ink-900: #171a21;
+  --color-steel-500: #0f6fb8;
+  --color-steel-600: #0c5b98;
+  --color-steel-700: #0a4a7c;
+  --font-sans: ui-sans-serif, system-ui, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-ink-50);
+  color: var(--color-ink-900);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #0e1116;
+    color: #e6e9ef;
+  }
+}
+
+::selection {
+  background: #0f6fb8;
+  color: #fff;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+/* Скрываем стрелки у number-инпутов в таблицах спецификации */
+.no-spin::-webkit-outer-spin-button,
+.no-spin::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.no-spin {
+  -moz-appearance: textfield;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+}
