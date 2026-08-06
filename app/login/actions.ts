@@ -9,11 +9,28 @@ export async function signIn(formData: FormData) {
   const password = String(formData.get('password') ?? '')
   const next = String(formData.get('next') ?? '/')
 
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    redirect(
+      `/login?error=${encodeURIComponent(
+        'Не заданы переменные окружения NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY'
+      )}`
+    )
+  }
+
   const supabase = await createClient()
   const { error } = await supabase.auth.signInWithPassword({ email, password })
 
   if (error) {
-    redirect(`/login?error=${encodeURIComponent('Неверный e-mail или пароль')}`)
+    // Разделяем «действительно неверный пароль» и технические сбои,
+    // иначе любая ошибка сервера выглядит как ошибка пользователя.
+    const wrongCredentials =
+      error.status === 400 || /invalid login credentials/i.test(error.message)
+
+    const message = wrongCredentials
+      ? 'Неверный e-mail или пароль'
+      : `Сбой входа (${error.status ?? '—'}): ${error.message}`
+
+    redirect(`/login?error=${encodeURIComponent(message)}`)
   }
 
   revalidatePath('/', 'layout')
